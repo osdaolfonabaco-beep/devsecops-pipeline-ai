@@ -5,39 +5,46 @@ name: AI Security Code Review
 on:
   push:
     branches:
-      - main  # Se ejecuta en cada push a la rama main
+      - main
   pull_request:
-    branches:
-      - main  # También en pull requests a main
+    # Ahora nos enfocamos en los PRs
+    types: [opened, synchronize] # Se ejecuta al abrir o actualizar un PR
 
-# Qué trabajos (jobs) debe ejecutar
+# Permisos: ¡NUEVO Y CRÍTICO!
+# Le da permiso al workflow para escribir en Pull Requests
+permissions:
+  pull-requests: write
+
 jobs:
   ai-security-scan:
-    # La máquina virtual que usará GitHub (Ubuntu es estándar y rápido)
     runs-on: ubuntu-latest
-
     steps:
-      # Paso 1: "Clonar" tu código del repo a la máquina virtual
       - name: Check out repository
         uses: actions/checkout@v4
 
-      # Paso 2: Configurar Python (para que 'pip' y 'python' funcionen)
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10' # Puedes usar la versión que prefieras
+          python-version: '3.10'
 
-      # Paso 3: Instalar las dependencias de nuestro script
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       
-      # Paso 4: Ejecutar nuestro script de análisis de IA
       - name: Run AI Security Analysis
         run: python scripts/analyze_code.py
         env:
-          # ¡Aquí está la magia! 
-          # Pasa el secreto de GitHub como una variable de entorno
+          # El secreto de Anthropic, como antes
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-
+          
+          # ¡NUEVO! Pasa el token de GitHub al script
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+          # ¡NUEVO! Pasa el número del PR al script
+          # Esto solo existe si el evento es un 'pull_request'
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          
+          # ¡NUEVO! Pasa la URL de la API
+          GITHUB_API_URL: ${{ env.GITHUB_API_URL }}
+          GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
