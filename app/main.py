@@ -20,7 +20,7 @@ def close_connection(exception):
 
 @app.route('/user')
 def get_user():
-    # ¡VULNERABILIDAD INTENCIONAL DE INYECCIÓN SQL!
+    # VULNERABILIDAD INTENCIONAL DE INYECCIÓN SQL!
     user_id = request.args.get('id')
     db = get_db()
     
@@ -39,3 +39,5 @@ if __name__ == '__main__':
         db.commit()
     
     app.run(debug=True)
+
+# Test comment for English PR
