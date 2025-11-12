@@ -13,14 +13,14 @@ Instead of requiring a developer to hunt through hidden logs, feedback is immedi
 ### The Problem: Vulnerable Code
 The pipeline was designed to catch critical vulnerabilities, such as a **SQL Injection** flaw in the application code and a **Public S3 Bucket** in the Terraform configuration.
 
-![Vulnerable Code](.github/assets/01-vulnerable-code.png)
+
 
 ### The Solution: AI Report on the Pull Request
 The GitHub Actions workflow triggered, executed the analysis script, and posted this detailed report, effectively blocking a potentially insecure code merge.
 
-![AI Bot Report on PR](.github/assets/03-bot-comment.png)
 
-![Terraform Analysis](.github/assets/04-terraform-analysis.png)
+
+)
 
 ---
 
@@ -40,7 +40,7 @@ The GitHub Actions workflow triggered, executed the analysis script, and posted 
     * The script aggregates the AI's responses into a single Markdown report.
     * If it detects it's running in a PR (by checking for the `PR_NUMBER` variable), it uses the GitHub API (`requests`) to post the report as a comment on that PR.
 
-![Successful Pipeline in GitHub Actions](.github/assets/02-pipeline-success.png)
+
 
 ---
 
